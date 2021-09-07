@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends BaseRepository<CommentEntity, Long> {
 
-    CommentEntity findByBodyAndCreatedBy(String body, Long createdBy);
+    CommentEntity findByBodyAndCreatedBy(String body, String createdBy);
 }

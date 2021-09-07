@@ -11,13 +11,13 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Entity
-@Table(name = CommentEntity.TABLE_NAME)
-public class CommentEntity extends BaseEntity<Long> {
+@Table(name = RateEntity.TABLE_NAME)
+public class RateEntity extends BaseEntity<Long> {
 
-    public static final String TABLE_NAME = "COMMENT";
+    public static final String TABLE_NAME = "RATE";
 
-    @Column(name = "BODY")
-    private String body;
+    @Column(name = "RATE")
+    private short rate;
 
     @NotAudited
     @ManyToOne(fetch = FetchType.LAZY)

@@ -29,6 +29,10 @@ public class MyUserDetails implements UserDetails {
         return authorities;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -56,6 +60,6 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return user.isBlocked();
     }
 }

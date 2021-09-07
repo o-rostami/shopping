@@ -12,6 +12,13 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * A <i>DbInit</i>. This class has responsibility to populate the data base for the first time<p>
+ *
+ * @author Omid Rostami
+ */
+
+
 @Component
 public class DbInit {
 
@@ -69,7 +76,7 @@ public class DbInit {
         UserEntity adminUser = new UserEntity();
         adminUser.setUserName(adminUsername);
         adminUser.setPassword(adminPassword);
-        adminUser.setEnabled(Boolean.TRUE);
+        adminUser.setBlocked(Boolean.TRUE);
         adminUser = userRepository.save(adminUser);
 
         adminUser.getRoles().add(adminRole);

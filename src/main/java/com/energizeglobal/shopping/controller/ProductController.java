@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,21 +33,6 @@ public class ProductController {
         this.mapper = mapper;
     }
 
-    @PostMapping("rate")
-    @ApiOperation(value = "Endpoint for rating the product",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            response = Long.class,
-            httpMethod = "POST")
-    public ProductDto rateProduct(
-            @RequestBody ProductDto productDto) {
-        if (Objects.isNull(productDto.getId())) {
-            throw new NotNullException("PRODUCT.ID.IS.NULL", "productId");
-        }
-        if (Objects.isNull(productDto.getRate())) {
-            throw new NotNullException("PRODUCT.RATE.IS.NULL", "rate");
-        }
-        return mapper.entityToDto(service.rateProduct(mapper.dtoToEntity(productDto)));
-    }
 
     @GetMapping(value = "{id}")
     @ApiOperation(value = "Endpoint for returning the product",
@@ -82,12 +66,12 @@ public class ProductController {
             throw new NotNullException("SIZE.IS.ZERO", "Size");
         }
 
-        PagingResponse response = service.searchProduct(pagingRequest);
-        PagingResponse pagingResponse = new PagingResponse();
+        PagingResponse<ProductEntity> response = service.searchProduct(pagingRequest);
+        PagingResponse<ProductDto> pagingResponse = new PagingResponse<>();
         pagingResponse.setCount(response.getCount());
         pagingResponse.setSize(response.getSize());
         pagingResponse.setStart(response.getStart());
-        pagingResponse.setData((List) response.getData().stream().map(item -> mapper.entityToDto((ProductEntity) item)).collect(Collectors.toList()));
+        pagingResponse.setData(response.getData().stream().map(mapper::entityToDto).collect(Collectors.toList()));
         return pagingResponse;
     }
 }

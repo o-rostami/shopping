@@ -14,16 +14,11 @@ import java.util.Objects;
 
 @Service
 public class CommentServiceImpl implements CommentService {
-
-    private final CommentRepository repository;
-    private final ProductService productService;
-
-
     @Autowired
-    public CommentServiceImpl(CommentRepository repository, ProductService productService) {
-        this.repository = repository;
-        this.productService = productService;
-    }
+    private CommentRepository repository;
+    @Autowired
+    private ProductService productService;
+
 
     @Override
     public Long createComment(CommentEntity commentEntity) {
@@ -33,9 +28,10 @@ public class CommentServiceImpl implements CommentService {
         }
 
         ProductEntity productEntity = productService.getProductById(commentEntity.getProduct().getId());
-        if (Objects.nonNull(repository.findByBodyAndCreatedBy(commentEntity.getBody(), SecurityUtils.getCurrentUserId()))) {
+        if (Objects.nonNull(repository.findByBodyAndCreatedBy(commentEntity.getBody(), SecurityUtils.getCurrentUser()))) {
             throw new BusinessException("COMMENT.IS.DUPLICATE", "body");
         }
+        commentEntity.setProduct(productEntity);
         return repository.save(commentEntity).getId();
     }
 

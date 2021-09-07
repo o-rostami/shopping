@@ -2,7 +2,7 @@ package com.energizeglobal.shopping.exception;
 
 
 /**
- * A<i>InvalidPasswordException</i>.This Exception will be thrown whenever every filed value would be null<p>
+ * A<i>InvalidPasswordException</i>.This Exception will be thrown whenever password value would be invalid<p>
  *
  * @author Omid Rostami
  */

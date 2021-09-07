@@ -17,12 +17,14 @@ public class UserEntity extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "USER";
 
-    @Column(name = "USER_NAME")
+    @Column(name = "USER_NAME",unique = true)
     private String userName;
     @Column(name = "PASSWORD")
     private String password;
     @Column(name = "ENABLED")
-    private boolean enabled;
+    private boolean blocked;
+    @Column(name = "EMAIL")
+    private String email;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(

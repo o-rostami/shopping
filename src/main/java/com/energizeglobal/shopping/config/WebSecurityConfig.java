@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -53,27 +52,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // We don't need CSRF for this example
-//        httpSecurity.csrf().disable()
-//                // dont authenticate this particular request
-//                .authorizeRequests()
-//                .antMatchers("/authenticate")
-//                .permitAll().
-//                // all other requests need to be authenticated
-//                        anyRequest().authenticated().and().
-//                // make sure we use stateless session; session won't be used to
-//                // store user's state.
-//                        exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-//        // Add a filter to validate the tokens with every request
-//        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        ArrayList<String> allowedUrls = new ArrayList<String>(Arrays.asList("/auth/login", "/client/version/latest"));
+        ArrayList<String> allowedUrls = new ArrayList<>();
 
+        allowedUrls.add("/auth/register");
+        allowedUrls.add("/auth/login");
         allowedUrls.add("/actuator*");
-        allowedUrls.add("/panel/**");
         allowedUrls.add("/v2/api-docs");
-        allowedUrls.add("/webjars/**");
         allowedUrls.add("/swagger-resources/**");
         allowedUrls.add("/configuration/**");
         allowedUrls.add("/swagger-ui/*");
@@ -82,8 +66,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         httpSecurity.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/product/**").hasAnyAuthority("USER")
+                .antMatchers("/product/rate/**").hasAnyAuthority("USER")
+                .antMatchers("/product/comment/**").hasAnyAuthority("USER")
+                .antMatchers("/product/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/category/product/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/user/**").hasAnyAuthority("ADMIN")
                 .antMatchers(allowedUrls.toArray(new String[0])).permitAll()
                 .and().authorizeRequests().anyRequest().
                 authenticated().and().

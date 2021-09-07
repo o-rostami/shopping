@@ -34,8 +34,7 @@ public class ProductPerCategoryController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             response = Long.class,
             httpMethod = "POST")
-    public Long createProduct(
-            @RequestBody ProductDto productDto) {
+    public Long createProduct(@RequestBody ProductDto productDto) {
         if (Objects.isNull(productDto.getCategory()) || Objects.isNull(productDto.getCategory().getId())) {
             throw new NotNullException("CATEGORY.ID.IS.NULL", "CategoryId");
         }
@@ -52,30 +51,38 @@ public class ProductPerCategoryController {
             httpMethod = "PUT")
     public ProductDto updateProduct(
             @RequestBody ProductDto productDto) {
+        if (Objects.isNull(productDto.getCategory()) || Objects.isNull(productDto.getCategory().getId())) {
+            throw new NotNullException("CATEGORY.ID.IS.NULL", "CategoryId");
+        }
+        if (Objects.isNull(productDto.getName())) {
+            throw new NotNullException("PRODUCT.NAME.IS.NULL", "productName");
+        }
         return mapper.entityToDto(service.updateProduct(mapper.dtoToEntity(productDto)));
     }
 
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "{categoryId}/{id}")
     @ApiOperation(value = "Endpoint for returning the product",
             produces = MediaType.APPLICATION_JSON_VALUE,
             response = ProductDto.class, httpMethod = "GET")
-    public ProductDto getProductById(
+    public ProductDto findByIdAndCategoryId(
             @ApiParam(value = "The id of product created by calling createProduct() method. It can't be empty or null",
                     required = true)
+            @PathVariable(value = "categoryId") Long categoryId,
             @PathVariable(value = "id") Long playerId) {
-        return mapper.entityToDto(service.getProductById(playerId));
+        return mapper.entityToDto(service.findByIdAndCategoryId(categoryId, playerId));
     }
 
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "{categoryId}/{id}")
     @ApiOperation(value = "Endpoint for removing the product",
             produces = MediaType.APPLICATION_JSON_VALUE,
             response = ProductDto.class, httpMethod = "DELETE")
-    public void deletePlayer(
+    public void deleteByIdCategoryId(
             @ApiParam(value = "The id of product created by calling createProduct() method. It can't be empty or null",
                     required = true)
+            @PathVariable(value = "categoryId") Long categoryId,
             @PathVariable(value = "id") Long playerId) {
-        service.deleteProductById(playerId);
+        service.deleteByIdCategoryId(categoryId, playerId);
     }
 }

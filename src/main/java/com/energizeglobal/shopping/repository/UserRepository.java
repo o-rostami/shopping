@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends BaseRepository<UserEntity, Long> {
 
-    UserEntity findByUserNameAndEnabledTrue(String userName);
+    UserEntity findByUserNameAndBlockedTrue(String userName);
+
+    UserEntity findByUserName(String userName);
 }

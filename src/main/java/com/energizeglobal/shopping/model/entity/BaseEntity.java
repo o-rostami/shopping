@@ -33,11 +33,11 @@ public abstract class BaseEntity<I extends Serializable> {
 
     @CreatedBy
     @Column(name = "CREATED_BY", updatable = false)
-    protected Long createdBy;
+    protected String createdBy;
 
     @LastModifiedBy
     @Column(name = "LAST_MODIFIED_BY")
-    protected Long lastModifiedBy;
+    protected String lastModifiedBy;
 
     @Version
     @Column(name = "VERSION")
@@ -45,13 +45,13 @@ public abstract class BaseEntity<I extends Serializable> {
 
     @PrePersist
     private void touchForCreate() {
-        setCreatedBy(SecurityUtils.getCurrentUserId());
+        setCreatedBy(SecurityUtils.getCurrentUser());
         setCreatedDate(LocalDateTime.now());
     }
 
     @PreUpdate
     private void touchForUpdate() {
-        setLastModifiedBy(SecurityUtils.getCurrentUserId());
+        setLastModifiedBy(SecurityUtils.getCurrentUser());
         setLastModifiedDate(LocalDateTime.now());
     }
 

@@ -3,6 +3,11 @@ package com.energizeglobal.shopping.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * A<i>BadRequestException</i>.This Exception will be thrown whenever bad request exception expose<p>
+ *
+ * @author Omid Rostami
+ */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BadRequestException extends BaseException {
 

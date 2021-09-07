@@ -21,9 +21,8 @@ public class ProductEntity extends BaseEntity<Long> {
     private String name;
     @Column(name = "PRICE")
     private Double price;
-    @Column(name = "RATE")
-    private short rate;
-
+    @Column(name = "AVERAGE_RATE")
+    private Double averageRate;
 
     @NotAudited
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,6 +32,10 @@ public class ProductEntity extends BaseEntity<Long> {
     @NotAudited
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<CommentEntity> comments;
+
+    @NotAudited
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<RateEntity> rates;
 
 
 }

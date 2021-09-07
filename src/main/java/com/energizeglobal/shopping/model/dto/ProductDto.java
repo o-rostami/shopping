@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class ProductDto extends BaseDto {
 
     private String name;
-    private short rate;
+    private Double averageRate;
     private CategoryDto category;
 }

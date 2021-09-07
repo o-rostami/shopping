@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -31,9 +30,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Long createProduct(ProductEntity productEntity) {
         CategoryEntity categoryEntity = categoryService.getCategoryById(productEntity.getCategory().getId());
-        if (Objects.nonNull(repository.findByNameAndCategory(productEntity.getName(), categoryEntity))) {
+        if (repository.findByNameAndCategory(productEntity.getName(), categoryEntity).isPresent()) {
             throw new BusinessException("PRODUCT.NAME.IS.DUPLICATE", "productName");
         }
+        productEntity.setCategory(categoryEntity);
         return repository.save(productEntity).getId();
     }
 
@@ -44,6 +44,7 @@ public class ProductServiceImpl implements ProductService {
             throw new BusinessException("VERSION.IS.NOT.VALID", "version");
         }
         dbProduct.setName(productEntity.getName());
+        dbProduct.setPrice(productEntity.getPrice());
         repository.save(dbProduct);
         return dbProduct;
     }
@@ -61,21 +62,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProductById(Long playerId) {
-        ProductEntity entity = getProductById(playerId);
-        repository.delete(entity);
-    }
-
-    @Override
     public PagingResponse<ProductEntity> searchProduct(PagingRequest pagingRequest) {
         PaginationExecutor<ProductEntity> paginationExecutor = new PaginationExecutor<>(pagingRequest, repository);
         return paginationExecutor.execute();
     }
 
-    @Override
-    public ProductEntity rateProduct(ProductEntity entity) {
-        ProductEntity dbProduct = getProductById(entity.getId());
-        dbProduct.setRate(entity.getRate());
-        return repository.save(dbProduct);
+    public ProductEntity findByIdAndCategoryId(Long categoryId, Long productId) {
+        return repository
+                .findByIdAndCategoryId(productId, categoryId)
+                .orElseThrow(() -> new NotFoundException("PRODUCT.NOT.EXIST"));
     }
+
+    @Override
+    public void deleteByIdCategoryId(Long categoryId, Long productId) {
+        ProductEntity productEntity = findByIdAndCategoryId(categoryId, productId);
+        repository.delete(productEntity);
+    }
+
 }

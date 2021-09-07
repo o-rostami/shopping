@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDto extends BaseDto {
+public class RateDto extends BaseDto {
 
-    private String body;
+    private Short rate;
     private ProductDto product;
 }
