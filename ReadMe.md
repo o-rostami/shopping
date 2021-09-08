@@ -1,4 +1,4 @@
-This project was created based on spring boot and jwt token
+This project was created based on spring boot and jwt token and using h2 as a databse but can change to any other relational databses
 
 # Build docker image
 just run this command to build corresponding image `docker build -t shopping-app .`
